@@ -1,0 +1,37 @@
+{
+  "name": "ipv4-heatmap-service",
+  "version": "0.1.0",
+  "description": "Service that processes IP Address geolocation data",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha test/unit",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sammuggPS/ipv4-heatmap-service.git"
+  },
+  "keywords": [
+    "ipv4",
+    "ip",
+    "geo",
+    "geojson",
+    "geodata",
+    "heatmap"
+  ],
+  "author": "Sam Muggleworth",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sammuggPS/ipv4-heatmap-service/issues"
+  },
+  "homepage": "https://github.com/sammuggPS/ipv4-heatmap-service#readme",
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^6.0.2",
+    "sinon": "^7.3.0"
+  },
+  "dependencies": {
+    "config": "^3.0.1",
+    "express": "^4.16.4"
+  }
+}
