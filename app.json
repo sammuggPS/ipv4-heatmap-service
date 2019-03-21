@@ -1,0 +1,16 @@
+{
+  "name": "ipv4-heatmap-service",
+  "description": "Service that processes IP Address geolocation data",
+  "repository": "https://github.com/sammuggPS/ipv4-heatmap-service.git",
+  "keywords": [
+    "ipv4",
+    "ip",
+    "geo",
+    "geojson",
+    "geodata",
+    "heatmap",
+    "heroku",
+    "express"
+  ],
+  "image": "heroku/nodejs"
+}

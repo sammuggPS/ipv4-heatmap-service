@@ -1,7 +1,7 @@
-const config = require('config');
 const express = require('express');
 const version = require('./package.json').version;
 const ipCoordinateService = require('./services/ip-coordinate-service');
+const PORT = process.env.PORT || 5000;
 
 // Status will change to Healthy on initialization complete
 // "Failed to Initialize" if data preparation fails
@@ -30,4 +30,4 @@ app.get('/ip-coordinates', (req, res) => {
   // }
 });
 
-app.listen(config.port, () => console.log(`Service started at ${config.port}!`));
+app.listen(PORT, () => console.log(`Service started at ${PORT}!`));
