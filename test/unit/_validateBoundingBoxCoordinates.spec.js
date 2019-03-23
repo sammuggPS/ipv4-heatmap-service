@@ -57,70 +57,6 @@ describe('IpCoordinateService - _validateBoundingBoxCoordinates()', () => {
       };
     });
 
-    describe('When upperlat is not a number', () => {
-      beforeEach(() => {
-        params.upperlat = undefined;
-      });
-
-      it('should throw a 422 error', () => {
-        try {
-          _validateBoundingBoxCoordinates(params);
-          throw new Error('Didn\'t receive expected error');
-        } catch (e) {
-          expect(e.status).to.equal(422);
-          expect(e.message).to.equal('upperlat, lowerlat, upperlong, and lowerlong should all be numbers');
-        }
-      });
-    });
-
-    describe('When lowerlat is not a number', () => {
-      beforeEach(() => {
-        params.lowerlat = undefined;
-      });
-
-      it('should throw a 422 error', () => {
-        try {
-          _validateBoundingBoxCoordinates(params);
-          throw new Error('Didn\'t receive expected error');
-        } catch (e) {
-          expect(e.status).to.equal(422);
-          expect(e.message).to.equal('upperlat, lowerlat, upperlong, and lowerlong should all be numbers');
-        }
-      });
-    });
-
-    describe('When upperlong is not a number', () => {
-      beforeEach(() => {
-        params.upperlong = undefined;
-      });
-
-      it('should throw a 422 error', () => {
-        try {
-          _validateBoundingBoxCoordinates(params);
-          throw new Error('Didn\'t receive expected error');
-        } catch (e) {
-          expect(e.status).to.equal(422);
-          expect(e.message).to.equal('upperlat, lowerlat, upperlong, and lowerlong should all be numbers');
-        }
-      });
-    });
-
-    describe('When lowerlong is not a number', () => {
-      beforeEach(() => {
-        params.lowerlong = undefined;
-      });
-
-      it('should throw a 422 error', () => {
-        try {
-          _validateBoundingBoxCoordinates(params);
-          throw new Error('Didn\'t receive expected error');
-        } catch (e) {
-          expect(e.status).to.equal(422);
-          expect(e.message).to.equal('upperlat, lowerlat, upperlong, and lowerlong should all be numbers');
-        }
-      });
-    });
-
     describe('When upperlat is out of acceptable range of -90 to 90', () => {
       it('should throw a 422 error', () => {
         params.upperlat = -91;
@@ -210,23 +146,8 @@ describe('IpCoordinateService - _validateBoundingBoxCoordinates()', () => {
     });
 
     describe('When all bounds are in acceptable range', () => {
-      beforeEach(() => {
-        params = {
-          upperlat: 0,
-          lowerlat: 0,
-          upperlong: 0,
-          lowerlong: 0
-        };
-      });
-
       it('should return uneventfully', () => {
-        try {
-          _validateBoundingBoxCoordinates(params);
-          throw new Error('Didn\'t receive expected error');
-        } catch (e) {
-          expect(e.status).to.equal(422);
-          expect(e.message).to.equal('upperlat, lowerlat, upperlong, and lowerlong should be in valid geospatial range');
-        }
+        _validateBoundingBoxCoordinates(params);
       });
     });
   });
