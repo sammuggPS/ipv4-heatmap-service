@@ -3,22 +3,22 @@
 const rewire = require('rewire');
 const expect = require('chai').expect;
 
-describe('IpCoordinateService - _validateQueryParams()', () => {
-  let _validateQueryParams;
+describe('IpCoordinateService - _validateBoundingBoxCoordinates()', () => {
+  let _validateBoundingBoxCoordinates;
 
   before(() => {
     let service = rewire('../../services/ip-coordinate-service');
-    _validateQueryParams = service.__get__('_validateQueryParams');
+    _validateBoundingBoxCoordinates = service.__get__('_validateBoundingBoxCoordinates');
   });
 
   describe('Given no query parameters', () => {
     it('should throw a 422 error', () => {
       try {
-        _validateQueryParams();
+        _validateBoundingBoxCoordinates();
         throw new Error('Didn\'t receive expected error');
       } catch (e) {
         expect(e.status).to.equal(422);
-        expect(e.message).to.equal('upperLat, lowerLat, upperLong, and lowerLong are all required parameters');
+        expect(e.message).to.equal('upperlat, lowerlat, upperlong, and lowerlong are all required parameters');
       }
     });
   });
@@ -28,105 +28,204 @@ describe('IpCoordinateService - _validateQueryParams()', () => {
 
     beforeEach(() => {
       params = {
-        upperLat: 1,
-        lowerLat: 2,
-        upperLong: 3
+        upperlat: 1,
+        lowerlat: 2,
+        upperlong: 3
       };
     });
 
     it('should throw a 422 error', () => {
       try {
-        _validateQueryParams(params);
+        _validateBoundingBoxCoordinates(params);
         throw new Error('Didn\'t receive expected error');
       } catch (e) {
         expect(e.status).to.equal(422);
-        expect(e.message).to.equal('upperLat, lowerLat, upperLong, and lowerLong are all required parameters');
+        expect(e.message).to.equal('upperlat, lowerlat, upperlong, and lowerlong are all required parameters');
       }
     });
   });
 
-  describe('Given upperLat, lowerLat, upperLong, and lowerLong', () => {
+  describe('Given upperlat, lowerlat, upperlong, and lowerlong', () => {
     let params;
 
     beforeEach(() => {
       params = {
-        upperLat: 1,
-        lowerLat: 2,
-        upperLong: 3,
-        lowerLong: 4
+        upperlat: 1,
+        lowerlat: 2,
+        upperlong: 3,
+        lowerlong: 4
       };
     });
 
-    describe('When upperLat is not a number', () => {
+    describe('When upperlat is not a number', () => {
       beforeEach(() => {
-        params.upperLat = undefined;
+        params.upperlat = undefined;
       });
 
       it('should throw a 422 error', () => {
         try {
-          _validateQueryParams(params);
+          _validateBoundingBoxCoordinates(params);
           throw new Error('Didn\'t receive expected error');
         } catch (e) {
           expect(e.status).to.equal(422);
-          expect(e.message).to.equal('upperLat, lowerLat, upperLong, and lowerLong should all be numbers');
+          expect(e.message).to.equal('upperlat, lowerlat, upperlong, and lowerlong should all be numbers');
         }
       });
     });
 
-    describe('When lowerLat is not a number', () => {
+    describe('When lowerlat is not a number', () => {
       beforeEach(() => {
-        params.lowerLat = undefined;
+        params.lowerlat = undefined;
       });
 
       it('should throw a 422 error', () => {
         try {
-          _validateQueryParams(params);
+          _validateBoundingBoxCoordinates(params);
           throw new Error('Didn\'t receive expected error');
         } catch (e) {
           expect(e.status).to.equal(422);
-          expect(e.message).to.equal('upperLat, lowerLat, upperLong, and lowerLong should all be numbers');
+          expect(e.message).to.equal('upperlat, lowerlat, upperlong, and lowerlong should all be numbers');
         }
       });
     });
 
-    describe('When upperLong is not a number', () => {
+    describe('When upperlong is not a number', () => {
       beforeEach(() => {
-        params.upperLong = undefined;
+        params.upperlong = undefined;
       });
 
       it('should throw a 422 error', () => {
         try {
-          _validateQueryParams(params);
+          _validateBoundingBoxCoordinates(params);
           throw new Error('Didn\'t receive expected error');
         } catch (e) {
           expect(e.status).to.equal(422);
-          expect(e.message).to.equal('upperLat, lowerLat, upperLong, and lowerLong should all be numbers');
+          expect(e.message).to.equal('upperlat, lowerlat, upperlong, and lowerlong should all be numbers');
         }
       });
     });
 
-    describe('When lowerLong is not a number', () => {
+    describe('When lowerlong is not a number', () => {
       beforeEach(() => {
-        params.lowerLong = undefined;
+        params.lowerlong = undefined;
       });
 
       it('should throw a 422 error', () => {
         try {
-          _validateQueryParams(params);
+          _validateBoundingBoxCoordinates(params);
           throw new Error('Didn\'t receive expected error');
         } catch (e) {
           expect(e.status).to.equal(422);
-          expect(e.message).to.equal('upperLat, lowerLat, upperLong, and lowerLong should all be numbers');
+          expect(e.message).to.equal('upperlat, lowerlat, upperlong, and lowerlong should all be numbers');
         }
       });
     });
 
-    describe('When all params are present and numbers', () => {
-      it('should return without error', () => {
+    describe('When upperlat is out of acceptable range of -90 to 90', () => {
+      it('should throw a 422 error', () => {
+        params.upperlat = -91;
         try {
-          _validateQueryParams(params);
+          _validateBoundingBoxCoordinates(params);
+          throw new Error('Didn\'t receive expected error');
         } catch (e) {
-          throw new Error('Shouldn\'t have gotten an error');
+          expect(e.status).to.equal(422);
+          expect(e.message).to.equal('upperlat, lowerlat, upperlong, and lowerlong should be in valid geospatial range');
+        }
+
+        params.upperlat = 91;
+        try {
+          _validateBoundingBoxCoordinates(params);
+          throw new Error('Didn\'t receive expected error');
+        } catch (e) {
+          expect(e.status).to.equal(422);
+          expect(e.message).to.equal('upperlat, lowerlat, upperlong, and lowerlong should be in valid geospatial range');
+        }
+      });
+    });
+
+    describe('When lowerlat is out of acceptable range of -90 to 90', () => {
+      it('should throw a 422 error', () => {
+        params.lowerlat = -91;
+        try {
+          _validateBoundingBoxCoordinates(params);
+          throw new Error('Didn\'t receive expected error');
+        } catch (e) {
+          expect(e.status).to.equal(422);
+          expect(e.message).to.equal('upperlat, lowerlat, upperlong, and lowerlong should be in valid geospatial range');
+        }
+
+        params.lowerlat = 91;
+        try {
+          _validateBoundingBoxCoordinates(params);
+          throw new Error('Didn\'t receive expected error');
+        } catch (e) {
+          expect(e.status).to.equal(422);
+          expect(e.message).to.equal('upperlat, lowerlat, upperlong, and lowerlong should be in valid geospatial range');
+        }
+      });
+    });
+
+    describe('When upperlong is out of acceptable range of -179.999999 to 180', () => {
+      it('should throw a 422 error', () => {
+        params.upperlong = -180;
+        try {
+          _validateBoundingBoxCoordinates(params);
+          throw new Error('Didn\'t receive expected error');
+        } catch (e) {
+          expect(e.status).to.equal(422);
+          expect(e.message).to.equal('upperlat, lowerlat, upperlong, and lowerlong should be in valid geospatial range');
+        }
+
+        params.upperlong = 181;
+        try {
+          _validateBoundingBoxCoordinates(params);
+          throw new Error('Didn\'t receive expected error');
+        } catch (e) {
+          expect(e.status).to.equal(422);
+          expect(e.message).to.equal('upperlat, lowerlat, upperlong, and lowerlong should be in valid geospatial range');
+        }
+      });
+    });
+
+    describe('When lowerlong is out of acceptable range of -179.999999 to 180', () => {
+      it('should throw a 422 error', () => {
+        params.lowerlong = -180;
+        try {
+          _validateBoundingBoxCoordinates(params);
+          throw new Error('Didn\'t receive expected error');
+        } catch (e) {
+          expect(e.status).to.equal(422);
+          expect(e.message).to.equal('upperlat, lowerlat, upperlong, and lowerlong should be in valid geospatial range');
+        }
+
+        params.lowerlong = 181;
+        try {
+          _validateBoundingBoxCoordinates(params);
+          throw new Error('Didn\'t receive expected error');
+        } catch (e) {
+          expect(e.status).to.equal(422);
+          expect(e.message).to.equal('upperlat, lowerlat, upperlong, and lowerlong should be in valid geospatial range');
+        }
+      });
+    });
+
+    describe('When all bounds are in acceptable range', () => {
+      beforeEach(() => {
+        params = {
+          upperlat: 0,
+          lowerlat: 0,
+          upperlong: 0,
+          lowerlong: 0
+        };
+      });
+
+      it('should return uneventfully', () => {
+        try {
+          _validateBoundingBoxCoordinates(params);
+          throw new Error('Didn\'t receive expected error');
+        } catch (e) {
+          expect(e.status).to.equal(422);
+          expect(e.message).to.equal('upperlat, lowerlat, upperlong, and lowerlong should be in valid geospatial range');
         }
       });
     });
