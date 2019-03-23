@@ -32,7 +32,9 @@
   "homepage": "https://github.com/sammuggPS/ipv4-heatmap-service#readme",
   "devDependencies": {
     "chai": "^4.2.0",
+    "fast-csv": "^2.4.1",
     "mocha": "^6.0.2",
+    "ora": "^3.2.0",
     "rewire": "^4.0.1",
     "sinon": "^7.3.0"
   },
