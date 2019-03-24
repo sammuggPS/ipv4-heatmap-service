@@ -4,7 +4,7 @@ const dbService = require('./db');
  * Validates input latitudes and longiutdes
  * Returns uneventfully if params are valid; Throws an error if invalid.
  *
- * This was written using TDD!
+ * Implemented using TDD!
  *
  * @param {*} parameters - query parameters to validate; sourced from req.query
  * @throws error if params are invalid
@@ -12,8 +12,8 @@ const dbService = require('./db');
  */
 const _validateBoundingBoxCoordinates = (parameters) => {
   if (!parameters ||
-      Object.keys(parameters).length < 4 ||
-      !(parameters.upperlat && parameters.lowerlat && parameters.upperlong &&parameters.lowerlong)) {
+    Object.keys(parameters).length < 4 ||
+    !(parameters.upperlat && parameters.lowerlat && parameters.upperlong && parameters.lowerlong)) {
     throw {
       status: 422,
       message: 'upperlat, lowerlat, upperlong, and lowerlong are all required parameters'
@@ -23,7 +23,7 @@ const _validateBoundingBoxCoordinates = (parameters) => {
   // Taking advantage of Javascript where 1 == '1' (even though 1 !== '1')
   if (!(-90 <= parameters.upperlat && 90 >= parameters.upperlat &&
     -90 <= parameters.lowerlat && 90 >= parameters.lowerlat &&
-    -179.999999<= parameters.upperlong && 180 >= parameters.upperlong &&
+    -179.999999 <= parameters.upperlong && 180 >= parameters.upperlong &&
     -179.999999 <= parameters.lowerlong && 180 >= parameters.lowerlong)) {
     throw {
       status: 422,
@@ -35,7 +35,7 @@ const _validateBoundingBoxCoordinates = (parameters) => {
 /**
  * Takes result set from db query and converts it into GeoJson format.
  *
- * This was written using TDD!
+ * Implemented using TDD!
  *
  * @params {*} results - result set from db query
  * @returns {GeoJSON} Feature Collection (Spec: https://tools.ietf.org/html/rfc7946)
@@ -61,9 +61,18 @@ const _mapResultsToGeoJson = (results) => {
   };
 };
 
+/**
+ * Orchestrates validation of input and subsequent fetching and munging of data
+ *
+ * Implemented using TDD, even though it was only three lines :)
+ *
+ * @param {*} params - the query params, passed in by handler function
+ * @returns {Promise} for a GeoJSON Feature Collection (Spec: https://tools.ietf.org/html/rfc7946)
+ */
 const getPointsInBoundingBox = async (params) => {
   _validateBoundingBoxCoordinates(params);
-  return dbService.findInBoundingBox(params);
+  let results = await dbService.findInBoundingBox(params);
+  return _mapResultsToGeoJson(results);
 };
 
 module.exports = {
