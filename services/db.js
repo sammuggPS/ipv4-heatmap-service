@@ -37,10 +37,39 @@ const init = async () => {
  * - ST_GeomFromText lets us form a POLYGON on the fly (doesn't have to be stored in db)
  * - the ST_INTERSECTS will return true if the point is inside the polygon
  */
-const findInPolygonSql = 'SELECT * FROM ipv4_points as p WHERE ST_INTERSECTS(ST_GeomFromText(\'POLYGON(($1 $3, $1 $4, $2 $4, $2 $3, $1 $3))\', 4326), p.geo)';
+const findInPolygonSql = 'SELECT * FROM ipv4_points as p WHERE ST_INTERSECTS(ST_GeomFromText($1, 4326), p.geo)';
 
-const findInBoundingBox = () => {
-  return findInPolygonSql;
+/**
+ * Gets a client connection and makes the findInPolygonSql query
+ *
+ * @param {*} params - query params for bounding box
+ * @returns Result set from SELECT query
+ */
+const findInBoundingBox = async ({ lowerlong, upperlong, lowerlat, upperlat }) => {
+  const client = await pool.connect();
+  let result;
+
+  try {
+    /**
+     * Originally, I was going to call client.query like so
+     * client.query(findInPolygonSql, [lowerlong, upperlong, lowerlat, upperlat]);
+     *
+     * However, There is a quirk in the postgres tool that when a parameter is surrounded by quotes, in a query
+     * e.g. "'$1\'", it is treated as a string literal, not a parameter. Therefore, I had to construct the POLYGON
+     * text as one single parameter to be passed in.
+     */
+    let polygon = `POLYGON((${lowerlong} ${lowerlat}, ${lowerlong} ${upperlat}, ${upperlong} ${upperlat}, ${upperlong} ${lowerlat}, ${lowerlong} ${lowerlat}))`;
+    result = await client.query(findInPolygonSql, [polygon]);
+    return result;
+  } catch (e) {
+    console.error('Error in service: db - PostGres encountered an error', e);
+    throw {
+      status: 500,
+      message: 'Error occurred while fetching data from store'
+    };
+  } finally {
+    client.release();
+  }
 };
 
 module.exports = {
