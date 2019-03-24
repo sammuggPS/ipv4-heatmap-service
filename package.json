@@ -39,6 +39,8 @@
     "sinon": "^7.3.0"
   },
   "dependencies": {
-    "express": "^4.16.4"
+    "config": "^3.0.1",
+    "express": "^4.16.4",
+    "pg": "^7.9.0"
   }
 }

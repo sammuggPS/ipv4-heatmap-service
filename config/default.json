@@ -1,0 +1,10 @@
+{
+  "pgPool": {
+    "user": "sammugg",
+    "host": "localhost",
+    "database": "ipv4-heatmap-db",
+    "password": "",
+    "port": 5432,
+    "max": 20
+  }
+}
