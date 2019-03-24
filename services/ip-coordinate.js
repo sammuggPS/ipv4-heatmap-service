@@ -61,11 +61,11 @@ const _mapResultsToGeoJson = (results) => {
   };
 };
 
-const getInBoundsPoints = async (params) => {
+const getPointsInBoundingBox = async (params) => {
   _validateBoundingBoxCoordinates(params);
   return dbService.findInBoundingBox(params);
 };
 
 module.exports = {
-  getInBoundsPoints
+  getPointsInBoundingBox
 };
