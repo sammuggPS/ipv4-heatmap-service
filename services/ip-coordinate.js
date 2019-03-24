@@ -1,7 +1,10 @@
+const dbService = require('./db');
+
 /**
  * Validates input latitudes and longiutdes
  * Returns uneventfully if params are valid; Throws an error if invalid.
  *
+ * This was written using TDD!
  *
  * @param {*} parameters - query parameters to validate; sourced from req.query
  * @throws error if params are invalid
@@ -30,27 +33,39 @@ const _validateBoundingBoxCoordinates = (parameters) => {
 };
 
 /**
- * Constructs the SELECT query that uses ST_INTERSECT to find points in the bound box.
- * - ipv4_points is the table containing the coordinate data from GeoLite2-City-Blocks-IPv4.csv
- * - p.geo is the GEOGRAPHY type column in PG
- * - The POLYGON defines the area in which to find coordinates
- * - ST_GeomFromText lets us form a POLYGON on the fly (doesn't have to be stored in db)
- * - the ST_INTERSECTS will return true if the point is inside the polygon
+ * Takes result set from db query and converts it into GeoJson format.
  *
- * The prefix '_' indicates that this is a private method that shouldn't be exported.
+ * This was written using TDD!
  *
- * @param {*} params - dereferenced upper and lower latitude and longitude
- * @returns {String} SELECT query
+ * @params {*} results - result set from db query
+ * @returns {GeoJSON} Feature Collection (Spec: https://tools.ietf.org/html/rfc7946)
  */
-const _constructIntersectQuery = ({ upperlat, upperlong, lowerlat, lowerlong}) => {
-  return 'SELECT * FROM ipv4_points as p WHERE ' +
-    'ST_INTERSECTS(ST_GeomFromText(\'POLYGON((' +
-      `${lowerlong} ${lowerlat}, ` +
-      `${lowerlong} ${upperlat}, ` +
-      `${upperlong} ${upperlat}, ` +
-      `${upperlong} ${lowerlat}, ` +
-      `${lowerlong} ${lowerlat}))', 4326), ` +
-      'p.geo)';
+const _mapResultsToGeoJson = (results) => {
+  return {
+    type: 'FeatureCollection',
+    features: results.rows.map((row) => {
+      return {
+        type: 'Feature',
+        properties: {
+          id: row.id
+        },
+        geometry: {
+          type: 'Point',
+          coordinates: [
+            row.long,
+            row.lat
+          ]
+        }
+      };
+    })
+  };
 };
 
-module.exports = {};
+const getInBoundsPoints = async (params) => {
+  _validateBoundingBoxCoordinates(params);
+  return dbService.findInBoundingBox(params);
+};
+
+module.exports = {
+  getInBoundsPoints
+};

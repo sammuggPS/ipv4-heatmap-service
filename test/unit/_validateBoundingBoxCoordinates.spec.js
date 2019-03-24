@@ -7,7 +7,7 @@ describe('IpCoordinateService - _validateBoundingBoxCoordinates()', () => {
   let _validateBoundingBoxCoordinates;
 
   before(() => {
-    let service = rewire('../../services/ip-coordinate-service');
+    let service = rewire('../../services/ip-coordinate');
     _validateBoundingBoxCoordinates = service.__get__('_validateBoundingBoxCoordinates');
   });
 

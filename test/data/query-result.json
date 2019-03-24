@@ -1,0 +1,89 @@
+{
+  "command": "SELECT",
+  "rowCount": 9658,
+  "oid": null,
+  "rows": [
+    {
+      "id": 36071,
+      "long": -78.6015,
+      "lat": 35.7614,
+      "geo": "0101000020E6100000D122DBF97EA653C05396218E75E14140"
+    },
+    {
+      "id": 36129,
+      "long": -78.653,
+      "lat": 35.7908,
+      "geo": "0101000020E61000006F1283C0CAA953C0A1D634EF38E54140"
+    },
+    {
+      "id": 36513,
+      "long": -78.7735,
+      "lat": 35.7299,
+      "geo": "0101000020E61000002FDD240681B153C0DAACFA5C6DDD4140"
+    },
+    {
+      "id": 36646,
+      "long": -78.8881,
+      "lat": 35.8047,
+      "geo": "0101000020E6100000F7E461A1D6B853C0AC8BDB6800E74140"
+    },
+    {
+      "id": 36648,
+      "long": -78.8881,
+      "lat": 35.8047,
+      "geo": "0101000020E6100000F7E461A1D6B853C0AC8BDB6800E74140"
+    },
+    {
+      "id": 36649,
+      "long": -78.8881,
+      "lat": 35.8047,
+      "geo": "0101000020E6100000F7E461A1D6B853C0AC8BDB6800E74140"
+    },
+    {
+      "id": 36777,
+      "long": -78.7786,
+      "lat": 35.7641,
+      "geo": "0101000020E6100000992A1895D4B153C0D26F5F07CEE14140"
+    }
+  ],
+  "fields": [
+    {
+      "name": "id",
+      "tableID": 18083,
+      "columnID": 1,
+      "dataTypeID": 23,
+      "dataTypeSize": 4,
+      "dataTypeModifier": -1,
+      "format": "text"
+    },
+    {
+      "name": "long",
+      "tableID": 18083,
+      "columnID": 2,
+      "dataTypeID": 700,
+      "dataTypeSize": 4,
+      "dataTypeModifier": -1,
+      "format": "text"
+    },
+    {
+      "name": "lat",
+      "tableID": 18083,
+      "columnID": 3,
+      "dataTypeID": 700,
+      "dataTypeSize": 4,
+      "dataTypeModifier": -1,
+      "format": "text"
+    },
+    {
+      "name": "geo",
+      "tableID": 18083,
+      "columnID": 4,
+      "dataTypeID": 17051,
+      "dataTypeSize": -1,
+      "dataTypeModifier": 1107460,
+      "format": "text"
+    }
+  ],
+  "RowCtor": null,
+  "rowAsArray": false
+}
