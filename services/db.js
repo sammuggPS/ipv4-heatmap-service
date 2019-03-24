@@ -37,7 +37,7 @@ const init = async () => {
  * - ST_GeomFromText lets us form a POLYGON on the fly (doesn't have to be stored in db)
  * - the ST_INTERSECTS will return true if the point is inside the polygon
  */
-const findInPolygonSql = 'SELECT * FROM ipv4_points as p WHERE ST_INTERSECTS(ST_GeomFromText($1, 4326), p.geo)';
+const findInPolygonSql = 'SELECT * FROM ipv4_points as p WHERE ST_INTERSECTS(ST_GeomFromText($1, 4326), p.geo);';
 
 /**
  * Gets a client connection and makes the findInPolygonSql query
