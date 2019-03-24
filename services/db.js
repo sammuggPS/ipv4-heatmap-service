@@ -1,7 +1,33 @@
 const { Pool } = require('pg');
-const config = require('config');
+const poolConfig = require('config').get('pgPool');
 
-const pool = new Pool(config.get('pgPool'));
+let pool;
+let isShuttingDown = false;
+
+/**
+ * When the process is exiting, clears out all open pool connections
+ */
+const _shutdownPool = () => {
+  if (!isShuttingDown) {
+    isShuttingDown = true;
+    console.info('Cleaning out DB Pool');
+    pool.end()
+      .finally(() => {
+        process.exit(0);
+      });
+  }
+};
+
+const init = async () => {
+  pool = new Pool(poolConfig);
+  await pool.query('SELECT NOW()');
+
+  console.info('Connected to DB', poolConfig.database);
+
+  // Set up clean up step
+  process.on('exit', _shutdownPool);
+  process.on('SIGINT', _shutdownPool);
+};
 
 /**
  * The SELECT query used to find coordinates in bounding box
@@ -13,34 +39,11 @@ const pool = new Pool(config.get('pgPool'));
  */
 const findInPolygonSql = 'SELECT * FROM ipv4_points as p WHERE ST_INTERSECTS(ST_GeomFromText(\'POLYGON(($1 $3, $1 $4, $2 $4, $2 $3, $1 $3))\', 4326), p.geo)';
 
-pool.query('SELECT NOW()')
-  .then((res) => {
-    console.info('Connected to DB.');
-  })
-  .catch((e) => {
-    console.error('Couldn\'t connect to DB. Shutting down.');
-    process.exit(0);
-  });
-
-let isShuttingDown = false;
-const shutdownPool = () => {
-  if (!isShuttingDown) {
-    isShuttingDown = true;
-    console.info('Cleaning out DB Pool');
-    pool.end()
-      .finally(() => {
-        process.exit(0);
-      });
-  }
-};
-
-process.on('exit', shutdownPool);
-process.on('SIGINT', shutdownPool);
-
 const findInBoundingBox = () => {
   return findInPolygonSql;
 };
 
 module.exports = {
+  init,
   findInBoundingBox
 };

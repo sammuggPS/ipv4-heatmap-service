@@ -1,9 +1,11 @@
 {
   "undef": true,
   "unused": true,
-  "esversion": 6,
+  "esversion": 8,
   "globals": {
     "process": true,
-    "require": true
+    "require": true,
+    "console": true,
+    "module": true
   }
 }

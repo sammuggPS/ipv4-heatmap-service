@@ -25,4 +25,9 @@ geoCsv
       spinner.succeed('Finished');
       process.exit(0);
     }
+  })
+  .on('exit', function () {
+    // in case I put in a number bigger than the file
+    spinner.succeed('Finished');
+    process.exit(0);
   });
