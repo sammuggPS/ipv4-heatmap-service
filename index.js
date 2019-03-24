@@ -1,4 +1,7 @@
 const express = require('express');
+const cors = require('cors');
+const config = require('config');
+
 const handlers = require('./handlers/api');
 const dbService = require('./services/db');
 
@@ -9,6 +12,7 @@ const app = express();
 dbService.init()
   .then(() => {
     // Wire up routes to handlers
+    app.use(cors(config.get('cors')));
     app.get('/', handlers.getStatus);
     app.get('/ip-coordinates', handlers.getPointsInBoundingBox);
     app.listen(PORT, () => console.log(`Service started at ${PORT}!`));

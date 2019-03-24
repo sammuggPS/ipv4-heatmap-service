@@ -50,14 +50,12 @@ const findInBoundingBox = async ({ lowerlong, upperlong, lowerlat, upperlat }) =
   let result;
 
   try {
-    /**
-     * Originally, I was going to call client.query like so
-     * client.query(findInPolygonSql, [lowerlong, upperlong, lowerlat, upperlat]);
-     *
-     * However, There is a quirk in the postgres tool that when a parameter is surrounded by quotes, in a query
-     * e.g. "'$1\'", it is treated as a string literal, not a parameter. Therefore, I had to construct the POLYGON
-     * text as one single parameter to be passed in.
-     */
+    // Originally, I was going to call client.query like so:
+    //     await client.query(findInPolygonSql, [lowerlong, upperlong, lowerlat, upperlat]);
+    // However, There is a quirk in the postgres tool that when a parameter is surrounded by quotes, in a query
+    // e.g. "'$1\'", it is treated as a string literal, not a parameter. Therefore, I had to construct the POLYGON
+    // text as one single parameter to be passed in.
+
     let polygon = `POLYGON((${lowerlong} ${lowerlat}, ${lowerlong} ${upperlat}, ${upperlong} ${upperlat}, ${upperlong} ${lowerlat}, ${lowerlong} ${lowerlat}))`;
     result = await client.query(findInPolygonSql, [polygon]);
     return result;
