@@ -2,6 +2,12 @@
 
 Serves ipv4 coordinates for use in a heatmap implementation of IPv4 Address density.
 
+## Overview
+- [Node.js][node] app running with [Express.js][express]
+- Backed by [Heroku PostgreSQL][herokupg] datastore containing coordinates of IPv4 address locations
+- The response from `/ip-coordinates` complies with the [GeoJSON FeatureCollection spec][geojson]
+- App status can be checked by a GET to `/`
+
 ## Usage
 
 Install dependencies with `npm` or `yarn`.
@@ -21,11 +27,11 @@ npm test
 |Method       |Input|Output|Description
 |-------------|-----|-----|-|
 | GET `/` | n/a | Status Response | A GET on the api root will return the API status.  `200` if Healthy, `503` otherwise
-| GET `/ip-coordinates`| Bounding Box Input | GeoJSON FeatureCollection | Returns the set of IPv4 Coordinates that lie within the Bounding Box defined by query params. `200` if successfully found, `422` if input is invalid, `500` if an error occurs, `503` if service did not initialize
+| GET `/ip-coordinates`| Bounding Box Query params | GeoJSON FeatureCollection | Returns the set of IPv4 Coordinates that lie within the Bounding Box defined by query params. `200` if successfully found, `422` if input is invalid, `500` if an error occurs, `503` if service did not initialize
 
 ## Input Types
 
-### Bounding Box Input
+### Bounding Box Query params
 Query Parameters indicating the geographic bounding box in which to find IPv4 addresses.
 
 | Query Name | Query Type | Description
@@ -46,7 +52,7 @@ Response of type `application/json`
 | `version` | String | Semantic Version of current build
 
 ### GeoJSON FeatureCollection
-This response follows the [GeoJSON FeatureCollection spec][geojson].
+This response adheres to the [GeoJSON FeatureCollection spec][geojson].
 
 ```json
 {
@@ -78,4 +84,16 @@ Response of type `application/json`
 | `status` | Number | HTTP Status Code
 | `message` | String | Description of error that occurred
 
+
+## Scripts
+
+`create-inserts-sql.js` was written to read in and parse a large CSV file (using [`fast-csv`][fcsv]) and output a set of INSERT statements for PostgreSQL. It expects a number of rows to process as the second argument, which is handy when wanting to create a subset for testing. It should be called with stdout pointing to the desired output file.
+```
+node create-inserts-sql.js <inputfile>.csv {integer number of lines to process} > <outputfile>
+```
+
 [geojson]: https://tools.ietf.org/html/rfc7946#section-3.3
+[node]: https://nodejs.org/en/
+[express]: https://expressjs.com/
+[herokupg]: https://devcenter.heroku.com/articles/heroku-postgresql
+[fcsv]:https://c2fo.io/fast-csv/

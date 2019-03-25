@@ -2,7 +2,7 @@
  * This script simply spits out Postgres INSERT commands for the ipv4-points table.
  *
  * To run:
- * node insert-ipv4-points.js <inputfile>.csv {integer number of lines to process} > <outputfile>.json
+ * node create-inserts-sql.js <inputfile>.csv {integer number of lines to process} > <outputfile>
  */
 const fs = require('fs');
 const fastCsv = require('fast-csv');
