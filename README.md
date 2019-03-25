@@ -8,6 +8,9 @@ Serves ipv4 coordinates for use in a heatmap implementation of IPv4 Address dens
 - The response from `/ip-coordinates` complies with the [GeoJSON FeatureCollection spec][geojson]
 - App status can be checked by a GET to `/`
 
+> Note that you must have PostgreSQL installed, running, and configured properly in `config/default.js` in order to run this service on you machine.  
+> A useful guide to install Postgres on your machine can be found here http://postgresguide.com/setup/install.html
+
 ## Usage
 
 Install dependencies with `npm` or `yarn`.
